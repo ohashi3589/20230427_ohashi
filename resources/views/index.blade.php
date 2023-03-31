@@ -34,7 +34,7 @@
       <tr>
         <th>登録日</th>
         <th>タスク名</th>
-        <th>編集</th>
+        <th>更新</th>
         <th>削除</th>
       </tr>
       @foreach ($todos as $todo)
