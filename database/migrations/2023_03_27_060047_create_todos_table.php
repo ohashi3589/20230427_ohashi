@@ -13,20 +13,16 @@ class ChangeContentColumnLengthInTodosTable extends Migration
      */
     public function up()
     {
-        Schema::table('todos', function (Blueprint $table) {
-            $table->string('content', 20)->change();
+        Schema::create('todos', function (Blueprint $table) {
+            $table->id();
+            $table->string('content', 20);
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::table('todos', function (Blueprint $table) {
-            $table->text('content')->change();
-        });
+        Schema::dropIfExists('todos');
     }
 }
+
