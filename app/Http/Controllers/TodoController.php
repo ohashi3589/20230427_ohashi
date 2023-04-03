@@ -50,6 +50,19 @@ class TodoController extends Controller
 
 public function update(Request $request, $id)
 {
+    $validator = Validator::make($request->all(), [
+        'content' => 'required|max:20',
+    ], [
+        'content.max' => '・タスクは20文字以内で入力してください。',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()
+            ->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
     $todo = Todo::findOrFail($id);
     $todo->content = $request->input('content');
     $todo->save();
