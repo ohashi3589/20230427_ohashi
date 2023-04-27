@@ -109,6 +109,7 @@ class TodoController extends Controller
 
   public function search(Request $request)
   {
+
     $content = $request->input('content');
     $tag_id = $request->input('tag_id');
 
@@ -118,13 +119,15 @@ if ($content) {
   $query->where('content', 'LIKE', "%{$content}%");
 }
 
-if ($tag_id) {
-  $query->whereHas('tags', function ($query) use ($tag_id) {
-    $query->where('id', $tag_id);
-  });
-}
+    if ($tag_id) {
+      $query->whereHas('tags', function ($query) use ($tag_id) {
+        $query->where('tag_id', $tag_id);
+      });
+    }
 
 $todos = $query->get();
+
+    dd($todos);
 
     return view('task', compact('todos'));
   }
