@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Todo extends Model
+class Tag extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content'];
+    protected $fillable = ['name'];
 
-    public function tags()
+    public function todo()
     {
-        return $this->hasMany(Tag::class);
+        return $this->belongsTo(Todo::class);
     }
 }

@@ -22,10 +22,9 @@
       </form>
       @endauth
     </div>
-    <a href="{{ route('find.index') }}" class="btn-search">タスク検索</a>
-    <form method="POST" action="{{ route('store') }}">
-      @csrf
+    <form action="{{ route('search') }}" method="get">
       <div class="between">
+        @csrf
         @if($errors->has('content'))
         <div style="color: black; font-size: medium;">
           {{ $errors->first('content') }}
@@ -38,15 +37,16 @@
           </div>
           <div style="display: inline-block; width: 10%; ">
             <select name="tag" class="input-add" style="width: 100%;">
-              <option value="家事">家事</option>
-              <option value="勉強">勉強</option>
-              <option value="運動">運動</option>
-              <option value="食事">食事</option>
-              <option value="移動">移動</option>
+              <option value=""></option>
+              <option value="火事" {{ old('tag') == '家事' ? 'selected' : '' }}>家事</option>
+              <option value="勉強" {{ old('tag') == '勉強' ? 'selected' : '' }}>勉強</option>
+              <option value="運動" {{ old('tag') == '運動' ? 'selected' : '' }}>運動</option>
+              <option value="食事" {{ old('tag') == '食事' ? 'selected' : '' }}>食事</option>
+              <option value="移動" {{ old('tag') == '移動' ? 'selected' : '' }}>移動</option>
             </select>
           </div>
           <div style="display: inline-block;">
-            <button type="submit" class="button-add">追加</button>
+            <button type="submit" class="button-add">検索</button>
           </div>
         </div>
       </div>
@@ -60,17 +60,18 @@
         <th>削除</th>
       </tr>
       @foreach ($todos as $todo)
+      @if ($todo->display === true)
       <tr>
         <td>{{ $todo->created_at }}</td>
         <td>
           <form action="{{ route('update', $todo->id) }}" method="POST">
             @csrf
-            <input name="_method" type="hidden" value="POST">
-            <input name="content" type="text" class="input-edit" value="{{ $todo->content }}">
+            <input type="text" name="content" value="{{ $todo->content }}" class="input-update">
         </td>
         <td>
-          <select name="tag" class="input-edit" style="width: 100%;">
-            <option value="火事" {{ $todo->tag == '家事' ? 'selected' : '' }}>家事</option>
+          <select name="tag" class="input-update">
+            <option value=""></option>
+            <option value="家事" {{ $todo->tag == '家事' ? 'selected' : '' }}>家事</option>
             <option value="勉強" {{ $todo->tag == '勉強' ? 'selected' : '' }}>勉強</option>
             <option value="運動" {{ $todo->tag == '運動' ? 'selected' : '' }}>運動</option>
             <option value="食事" {{ $todo->tag == '食事' ? 'selected' : '' }}>食事</option>
@@ -78,19 +79,20 @@
           </select>
         </td>
         <td>
-          <button type="submit" class="button-edit">更新</button>
+          <button type="submit" class="button-update">更新</button>
           </form>
         </td>
         <td>
-          <form action="{{ route('delete', $todo->id) }}" method="POST">
+          <form action="{{ route('delete', $todo->$id) }}" method="POST">
             @csrf
-            <input name="_method" type="hidden" value="POST">
-            <button type="submit" class="button-danger">削除</button>
+            <button type="submit" class="button-delete">削除</button>
           </form>
         </td>
       </tr>
+      @endif
       @endforeach
     </table>
   </div>
+</body>
 
 </html>

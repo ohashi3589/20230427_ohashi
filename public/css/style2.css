@@ -1,0 +1,30 @@
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 追加 */
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.x-auth-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  max-width: 400px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.w-10.h-10 {
+  width: 50px;
+  height: 50px;
+}
