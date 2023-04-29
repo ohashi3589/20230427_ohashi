@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
@@ -25,7 +26,7 @@ class TodoController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'content' => 'required|max:20',
-      'tag' => 'required',
+      'tag_id' => 'required',
     ], [
       'content.max' => '・タスクは20文字以内で入力してください。',
     ]);
@@ -36,21 +37,18 @@ class TodoController extends Controller
         ->withErrors($validator)
         ->withInput();
     }
+    
 
-    $todo = new Todo;
+    $tag = Tag::find($request->input('tag_id'));
+    $todo = new Todo();
+    $todo->user_id = Auth::id();
     $todo->content = $request->content;
-    $todo->save();
-
-    $tag = new Tag;
-    $tag->name = $request->input('tag');
-    $tag->todo_id = $todo->id;
-    $tag->save();
-
-    $todo->tag = $tag->name;
+    $todo->tag()->associate($tag);
     $todo->save();
 
     return redirect()->route('index');
   }
+
 
   public function edit($id)
   {
@@ -75,7 +73,13 @@ class TodoController extends Controller
 
     $todo = Todo::findOrFail($id);
     $todo->content = $request->input('content');
-    $todo->tag = $request->input('tag');
+    $tagId = $request->input('tag_id');
+    if (!empty($tagId)) {
+      $tag = Tag::find($tagId);
+      if ($tag) {
+        $todo->tag_id = $tagId;
+      }
+    }
     $todo->save();
 
     return redirect()->route('index');
@@ -109,26 +113,24 @@ class TodoController extends Controller
 
   public function search(Request $request)
   {
-
     $content = $request->input('content');
     $tag_id = $request->input('tag_id');
 
-    $query = Todo::query();
-
-if ($content) {
-  $query->where('content', 'LIKE', "%{$content}%");
-}
-
-    if ($tag_id) {
-      $query->whereHas('tags', function ($query) use ($tag_id) {
-        $query->where('tag_id', $tag_id);
-      });
-    }
-
-$todos = $query->get();
+    $todos = Todo::query()
+      ->when($content, function ($query, $content) {
+        return $query->where('content', 'LIKE', "%{$content}%");
+      })
+      ->when($tag_id, function ($query, $tag_id) use ($content) {
+        if ($content) {
+          return $query->where('tag_id', $tag_id)
+            ->where('content', 'LIKE', "%{$content}%");
+        } else {
+          return $query->where('tag_id', $tag_id);
+        }
+      })
+      ->paginate(10);
 
     dd($todos);
-
     return view('task', compact('todos'));
   }
 

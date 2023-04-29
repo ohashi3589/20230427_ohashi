@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['name'];
-
-    public function todo()
+    public function todos()
     {
         return $this->hasMany(Todo::class);
     }

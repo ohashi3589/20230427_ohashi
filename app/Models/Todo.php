@@ -9,9 +9,7 @@ class Todo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content'];
-
-    public function tags()
+    public function tag()
     {
         return $this->belongsTo(Tag::class);
     }

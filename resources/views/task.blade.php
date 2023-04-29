@@ -36,13 +36,13 @@
             <input name="content" type="text" class="input-add" style="width: 100%;">
           </div>
           <div style="display: inline-block; width: 10%; ">
-            <select name="tag" class="input-add" style="width: 100%;">
+            <select name="tag_id" class="input-add" style="width: 100%;">
               <option value=""></option>
-              <option value="火事" {{ old('tag') == '家事' ? 'selected' : '' }}>家事</option>
-              <option value="勉強" {{ old('tag') == '勉強' ? 'selected' : '' }}>勉強</option>
-              <option value="運動" {{ old('tag') == '運動' ? 'selected' : '' }}>運動</option>
-              <option value="食事" {{ old('tag') == '食事' ? 'selected' : '' }}>食事</option>
-              <option value="移動" {{ old('tag') == '移動' ? 'selected' : '' }}>移動</option>
+              <option value="1" {{ old('tag_id') == '1' ? 'selected' : '' }}>家事</option>
+              <option value="2" {{ old('tag_id') == '2' ? 'selected' : '' }}>勉強</option>
+              <option value="3" {{ old('tag_id') == '3' ? 'selected' : '' }}>運動</option>
+              <option value="4" {{ old('tag_id') == '4' ? 'selected' : '' }}>食事</option>
+              <option value="5" {{ old('tag_id') == '5' ? 'selected' : '' }}>移動</option>
             </select>
           </div>
           <div style="display: inline-block;">
@@ -60,22 +60,22 @@
         <th>削除</th>
       </tr>
       @foreach ($todos as $todo)
-      @if ($todo->display === true)
+      @if ($todo->display === true && (!$search_tag_id || $todo->tag_id === $search_tag_id))
       <tr>
         <td>{{ $todo->created_at }}</td>
         <td>
-          <form action="{{ route('update', $todo->id) }}" method="POST">
+          <form action="{{ route('update', $todo->id) }}" method="GET">
             @csrf
-            <input type="text" name="content" value="{{ $todo->content }}" class="input-update">
+            <input type="text" name="content" value="{{ $todo->content }}" class="input-edit">
         </td>
         <td>
-          <select name="tag" class="input-update">
+          <select name="tag_id" class="input-edit">
             <option value=""></option>
-            <option value="家事" {{ $todo->tag == '家事' ? 'selected' : '' }}>家事</option>
-            <option value="勉強" {{ $todo->tag == '勉強' ? 'selected' : '' }}>勉強</option>
-            <option value="運動" {{ $todo->tag == '運動' ? 'selected' : '' }}>運動</option>
-            <option value="食事" {{ $todo->tag == '食事' ? 'selected' : '' }}>食事</option>
-            <option value="移動" {{ $todo->tag == '移動' ? 'selected' : '' }}>移動</option>
+            <option value="1" {{ $todo->tag_id == 1 ? 'selected' : '' }}>家事</option>
+            <option value="2" {{ $todo->tag_id == 2 ? 'selected' : '' }}>勉強</option>
+            <option value="3" {{ $todo->tag_id == 3 ? 'selected' : '' }}>運動</option>
+            <option value="4" {{ $todo->tag_id == 4 ? 'selected' : '' }}>食事</option>
+            <option value="5" {{ $todo->tag_id == 5 ? 'selected' : '' }}>移動</option>
           </select>
         </td>
         <td>
@@ -83,7 +83,7 @@
           </form>
         </td>
         <td>
-          <form action="{{ route('delete', $todo->$id) }}" method="POST">
+          <form action="{{ route('delete', $todo->id) }}" method="POST">
             @csrf
             <button type="submit" class="button-delete">削除</button>
           </form>

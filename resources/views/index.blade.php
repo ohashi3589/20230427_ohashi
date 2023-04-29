@@ -37,12 +37,12 @@
             <input name="content" type="text" class="input-add" style="width: 100%;">
           </div>
           <div style="display: inline-block; width: 10%; ">
-            <select name="tag" class="input-add" style="width: 100%;">
-              <option value="家事">家事</option>
-              <option value="勉強">勉強</option>
-              <option value="運動">運動</option>
-              <option value="食事">食事</option>
-              <option value="移動">移動</option>
+            <select name="tag_id" class="input-add" style="width: 100%;">
+              <option value="1">家事</option>
+              <option value="2">勉強</option>
+              <option value="3">運動</option>
+              <option value="4">食事</option>
+              <option value="5">移動</option>
             </select>
           </div>
           <div style="display: inline-block;">
@@ -63,31 +63,31 @@
       <tr>
         <td>{{ $todo->created_at }}</td>
         <td>
-          <form action="{{ route('update', $todo->id) }}" method="POST">
+          <form method="POST" action="{{ route('todos.update', $todo->id) }}">
             @csrf
-            <input name="_method" type="hidden" value="POST">
+            @method('PATCH')
             <input name="content" type="text" class="input-edit" value="{{ $todo->content }}">
         </td>
         <td>
-          <select name="tag" class="input-edit" style="width: 100%;">
-            <option value="火事" {{ $todo->tag == '家事' ? 'selected' : '' }}>家事</option>
-            <option value="勉強" {{ $todo->tag == '勉強' ? 'selected' : '' }}>勉強</option>
-            <option value="運動" {{ $todo->tag == '運動' ? 'selected' : '' }}>運動</option>
-            <option value="食事" {{ $todo->tag == '食事' ? 'selected' : '' }}>食事</option>
-            <option value="移動" {{ $todo->tag == '移動' ? 'selected' : '' }}>移動</option>
+          <select name="tag_id" class="input-edit" style="width: 100%;">
+            <option value="1" {{ $todo->tag_id == '1' ? 'selected' : '' }}>家事</option>
+            <option value="2" {{ $todo->tag_id == '2' ? 'selected' : '' }}>勉強</option>
+            <option value="3" {{ $todo->tag_id == '3' ? 'selected' : '' }}>運動</option>
+            <option value="4" {{ $todo->tag_id == '4' ? 'selected' : '' }}>食事</option>
+            <option value="5" {{ $todo->tag_id == '5' ? 'selected' : '' }}>移動</option>
           </select>
         </td>
         <td>
           <button type="submit" class="button-edit">更新</button>
           </form>
         </td>
-        <td>
-          <form action="{{ route('delete', $todo->id) }}" method="POST">
-            @csrf
-            <input name="_method" type="hidden" value="POST">
-            <button type="submit" class="button-danger">削除</button>
-          </form>
-        </td>
+      <td>
+        <form action="{{ route('delete', $todo->id) }}" method="POST">
+          @csrf
+          <input name="_method" type="hidden" value="POST">
+          <button type="submit" class="button-danger">削除</button>
+        </form>
+      </td>
       </tr>
       @endforeach
     </table>
