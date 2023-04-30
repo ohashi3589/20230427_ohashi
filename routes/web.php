@@ -45,4 +45,3 @@ Route::get('/logout', function () {
 Route::get('/find', [TodoController::class, 'find'])->name('find.index');
 Route::get('/todos/search', [TodoController::class, 'search'])->name('search');
 Route::patch('/todos/{id}', [TodoController::class, 'update'])->name('todos.update');
-

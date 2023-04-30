@@ -91,25 +91,18 @@ class TodoController extends Controller
     return redirect()->route('index');
   }
 
-  public function find(Request $request)
-  {
+public function find(Request $request)
+{
     $content = $request->input('content');
     $tag = $request->input('tag');
 
     $tasks = Todo::query();
 
-    if (!empty($content)) {
-      $tasks->where('content', 'LIKE', '%' . $content . '%');
-    }
-
-    if (!empty($tag)) {
-      $tasks->where('tag', $tag);
-    }
-
-    $tasks = $tasks->orderBy('created_at', 'desc')->get();
-
-    return view('task', ['todos' => $tasks]);
-  }
+    return view('task', [
+        'todos' => $tasks,
+        'tag_id' => $tag_id ?? null, 
+    ]);
+}
 
   public function search(Request $request)
   {
@@ -130,8 +123,7 @@ class TodoController extends Controller
       })
       ->paginate(10);
 
-    dd($todos);
-    return view('task', compact('todos'));
+    return view('task', compact('todos', 'tag_id',));
   }
 
 }
