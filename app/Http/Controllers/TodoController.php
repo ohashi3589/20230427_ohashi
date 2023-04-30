@@ -12,8 +12,12 @@ class TodoController extends Controller
 {
   public function index()
   {
-    $todos = Todo::orderBy('created_at', 'desc')->get();
-    return view('index', compact('todos'));
+    if (Auth::check()) {
+      $user_id = Auth::id();
+      $todos = Todo::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+      return view('index', compact('todos'));
+    }
+    return redirect()->route('login');
   }
 
   public function create()
