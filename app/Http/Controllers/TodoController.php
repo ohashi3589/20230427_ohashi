@@ -82,13 +82,14 @@ class TodoController extends Controller
     }
     $todo->save();
 
-    return redirect()->route('index');
+    // 更新前のURLにリダイレクトする
+    return redirect()->back();
   }
 
   public function delete(Todo $todo)
   {
     $todo->delete();
-    return redirect()->route('index');
+    return redirect()->back();
   }
 
 public function find(Request $request)

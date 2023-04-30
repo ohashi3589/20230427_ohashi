@@ -64,8 +64,10 @@
       <tr>
         <td>{{ $todo->created_at }}</td>
         <td>
-          <form action="{{ route('update', $todo->id) }}" method="GET">
+          <form action="{{ route('todos.update', $todo->id) }}" method="POST">
             @csrf
+            @method('PATCH')
+            <input type="hidden" name="tag_id" value="{{ $tag_id }}">
             <input type="text" name="content" value="{{ $todo->content }}" class="input-edit1">
         </td>
         <td>
